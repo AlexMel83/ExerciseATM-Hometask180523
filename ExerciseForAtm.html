@@ -81,7 +81,6 @@
 
         for (let i = NumberNotes; i >= 0; i--) {
           let result = collect(amount - i * CurrentNominal, nominals.slice(1));
-          console.log('result', result)
           if (result)
             return i ? { [CurrentNominal]: i, ...result } : result;
         }
@@ -92,20 +91,25 @@
         let givenominals = Object.keys(GiveMeMyMoney).map(Number).sort((a, b) => b - a);
         for (let i = 0; i < givenominals.length; i++) {
           ATM[givenominals[i]] -= GiveMeMyMoney[givenominals[i]];
-          console.log('ATM have: ', ATM);
         }
       }
       if (typeof (GiveMeMyMoney) === 'undefined') {
-        console.log('ATM no has enough number of notes! Please input another summ.')
-      } else
+        let lostmoney = 0;
+        for (let i = 0; i < nominals.length; i++) {
+          lostmoney += (nominals[i] * ATM[nominals[i]]);
+        }
+        console.log('ATM no has enough number of notes! You can get less than or equal: .', lostmoney)
+      } else {
         minusATM(GiveMeMyMoney);
 
-      return GiveMeMyMoney;
+        return GiveMeMyMoney;
+      }
+
     }
 
     console.log('Take your money: ', GetMoney(800, ATM));
     console.log('Take your money: ', GetMoney(800, ATM));
-    console.log('Take your money: ', GetMoney(800, ATM));
+    console.log('Take your money: ', GetMoney(700, ATM));
 
   </script>
 </body>
