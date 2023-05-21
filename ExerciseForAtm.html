@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> Hometask 18.05.23 Exercise for ATM </title>
+  <style type="text/css">
+
+  </style>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+
+  <script>
+
+    let array = [1, 2, 3, 4, 5];
+
+    function periodiciterator(array, time) {
+      for (let i = 0; i < array.length; i++) {
+        setTimeout(() => {
+          console.log(array[i]);
+        }, i * 1000)
+      }
+    };
+    periodiciterator(array, 5);
+    /////////////
+
+    let objfull = {
+      name: "name"
+    };
+    let objempty = {};
+
+    function isObjEmpty(obj) {
+      console.log(Boolean(Object.getOwnPropertyNames(obj).length));
+    }
+    isObjEmpty(objempty);
+    isObjEmpty(objfull);
+    ////////////////////////
+    function printTypeData(varvar) {
+      console.log(typeof varvar);
+    }
+    ////////////////////////////////////
+    let arrpropertis = ['surname', 'group'];
+    let objobj = {
+      name: 'name',
+      surname: 'surname',
+      group: 'group'
+    }
+    function deletePropertis(obj, arr) {
+      for (let i = 0; i < arr.length; i++) {
+        if (obj.hasOwnProperty(arr[i]))
+          delete obj[arr[i]];
+      }
+      return obj;
+    }
+    console.log(deletePropertis(objobj, arrpropertis));
+
+    /////////////////////////////////////////
+
+    let ATM = {
+      500: 2,
+      200: 2,
+      100: 2,
+      50: 5,
+      20: 12,
+      10: 20
+    }
+
+    function GetMoney(amountRequired, ATM) {
+      let nominals = Object.keys(ATM).map(Number).sort((a, b) => b - a);
+
+      function collect(amount, nominals) {
+        if (amount === 0) return {};
+        if (!nominals.length) return;
+        let CurrentNominal = nominals[0];
+        let AvailableNotes = ATM[CurrentNominal];
+        let NotesNeed = Math.floor(amount / CurrentNominal);
+        let NumberNotes = Math.min(AvailableNotes, NotesNeed);
+
+        for (let i = NumberNotes; i >= 0; i--) {
+          let result = collect(amount - i * CurrentNominal, nominals.slice(1));
+          console.log('result', result)
+          if (result)
+            return i ? { [CurrentNominal]: i, ...result } : result;
+        }
+      }
+
+      let GiveMeMyMoney = collect(amountRequired, nominals);
+      function minusATM(GiveMeMyMoney) {
+        let givenominals = Object.keys(GiveMeMyMoney).map(Number).sort((a, b) => b - a);
+        for (let i = 0; i < givenominals.length; i++) {
+          ATM[givenominals[i]] -= GiveMeMyMoney[givenominals[i]];
+          console.log('ATM have: ', ATM);
+        }
+      }
+      if (typeof (GiveMeMyMoney) === 'undefined') {
+        console.log('ATM no has enough number of notes! Please input another summ.')
+      } else
+        minusATM(GiveMeMyMoney);
+
+      return GiveMeMyMoney;
+    }
+
+    console.log('Take your money: ', GetMoney(800, ATM));
+    console.log('Take your money: ', GetMoney(800, ATM));
+    console.log('Take your money: ', GetMoney(800, ATM));
+
+  </script>
+</body>
+
+</html>
